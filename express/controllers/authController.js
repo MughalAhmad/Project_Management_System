@@ -23,10 +23,11 @@ module.exports = {
                     error:user.error,
                 });
             }
-            res.cookie("auth",user.response)
+            res.cookie("auth",user.response , {
+                maxAge: 60 * 60 * 1000,
+              })
             return res.send({
                 response:user.response,
-                user:user.user
             });
         } catch (error) {
             return res.send({
@@ -36,7 +37,7 @@ module.exports = {
     },
     logout:(req,res)=>{
         try {
-            console.log("req",req.body)
+            // console.log("req",req.body)
             const logoutResponse = authService.logout(req.body);
             if(logoutResponse.error){
                 res.send({
@@ -59,7 +60,7 @@ module.exports = {
             const signupValidate = await signupSchema.validateAsync(req.body);
 
             const signupResponse = await authService.signup(signupValidate);
-            console.log("c1",signupResponse);
+            // console.log("c1",signupResponse);
             if(signupResponse.error){
                 res.send({
                     error:signupResponse.error,

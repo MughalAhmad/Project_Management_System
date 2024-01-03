@@ -9,13 +9,13 @@ function OnBoarding() {
   const location = useLocation();
   const userId = location.state.userId;
 console.log("UserId",userId)
-  const INSTRUCTORS = [];
-
+  
   const getAllInstructors = async () => {
     const { data } = await axios.get(
       "http://localhost:3000/user/getAllInstructors"
     );
     if (data.response) {
+  const INSTRUCTORS = [];
       data.response.map((item) => {
         INSTRUCTORS.push({
           label: item.firstName + " " + item.lastName,

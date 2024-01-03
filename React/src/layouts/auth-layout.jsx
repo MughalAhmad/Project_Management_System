@@ -11,6 +11,7 @@ function Layout() {
 
   return (
     <>
+    {/* {isLogin == true ? <Login updateState={updateState} /> : <Signup updateState={updateState} /> } */}
       {isLogin && <Login updateState={updateState} />}
       {!isLogin && <Signup updateState={updateState} />}
     </>

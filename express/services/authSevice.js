@@ -50,9 +50,12 @@ if(sessionCreate.error){
   }
 }
 
+const SessionValue = sessionCreate;
+SessionValue.role = user.response.dataValues.role
+
 return {
-        response: token,
-        user:user.response.dataValues
+        response: SessionValue,
+        // user:user.response.dataValues
       };
     } catch (error) {
       return {

@@ -16,19 +16,19 @@ function Login(updateState) {
       withCredentials:true,
     }
     );
+    console.log("data ", data.response.response.UserId);
 
     if (data.error) {
       return alert("Invalid Credentials");
     }
 
-    console.log("data ", data.response);
 
-    if (data.user.role == "instructor") {
+    if (data.response.role == "instructor") {
       return navigate("/instructor");
     }
-// localStorage.setItem("userId",data.user.userId)
+   
     navigate("onboarding"
-    , { state: { userId: data.user.userId } }
+    , { state: { userId: data.response.response.UserId } }
     );
     return alert("Logged in Successfully");
   };
