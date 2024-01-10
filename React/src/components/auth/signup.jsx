@@ -4,12 +4,12 @@ import axios from "axios";
 
 const ROLE = [
   {
-    value: "tarinee",
-    label: "Trainee",
+    value: "trainee",
+    label: "trainee",
   },
   {
     value: "instructor",
-    label: "Instructor",
+    label: "instructor",
   },
 ];
 

@@ -1,11 +1,11 @@
 const { models } = require("./index");
 module.exports = {
-createSession: async (sessionId,token,UserId)=>{
+createSession: async (sessionId,token,userId)=>{
 try {
   const session = await models.Sessions.create({
     sessionId,
     token,
-    UserId,
+    userId,
   });
   if(session.error){
     return {
@@ -21,14 +21,14 @@ try {
   }
 }
 },
-getSession: async (UserId)=>{
+getSession: async (userId)=>{
   try {
     const session = await models.Sessions.findOne({
       where:{
-        UserId:UserId
+        userId:userId
       }
   });
-  console.log("Get Session",session)
+  // console.log("Get Session",session)
     return{
       response:session
     };
@@ -38,11 +38,11 @@ getSession: async (UserId)=>{
     }
   }
   },
-  getSessionToken: async (UserId,token)=>{
+  getSessionToken: async (userId,token)=>{
     try {
       const session = await models.Sessions.findOne({
         where:{
-          UserId:UserId,
+          userId:userId,
           token:token
         }
     });
@@ -61,11 +61,11 @@ getSession: async (UserId)=>{
       }
     }
     },
-  deleteSession: async (UserId) => {
+  deleteSession: async (userId) => {
     try {
      const session =await models.Sessions.destroy({
       where:{
-        UserId:UserId
+        userId:userId
       }
      });
      if(session.error){

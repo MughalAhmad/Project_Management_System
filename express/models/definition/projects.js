@@ -3,7 +3,7 @@ const sequelize =require("../../bin/dbConnection")
 class Projects extends Model{}
 
 Projects.init({
-    taskId:{
+    projectId:{
         primaryKey:true,
         type:DataTypes.STRING(60),
     },  
@@ -17,6 +17,10 @@ Projects.init({
         type:DataTypes.STRING(60), 
         
 },
+instructorId:{
+    allowNull:false,
+    type:DataTypes.STRING(60),
+}, 
 },
 {
     sequelize,

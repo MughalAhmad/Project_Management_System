@@ -50,6 +50,53 @@ module.exports = {
       };
     }
   },
+  getInstructorTrainees:async (query) => {
+    try {
+      const users = await userModel.getInstructorTrainees(query);
+      if(users.error){
+        return{
+            error:users.error,
+        }
+      }
+      return{
+        response:users.response
+      }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  createTrainee: async (body)=>{
+    try {
+      console.log("ser",body)
+        const userId = uuidV4();
+        const isUser = await userModel.getUserByEmail(body.email);
+        if(isUser.response||isUser.error){
+            return{
+                error:"user with email already exists", 
+            }
+        };
+
+        delete body.confirmPassword;
+        body.password=await bcryptjs.hash(body.password,10);
+        const user = await userModel.createTrainee(body,userId);
+        if(user.error){
+            return{
+                error:user.error 
+            }
+        }
+        delete user.response.dataValues.password;
+        return{
+            response:user.response 
+        }
+      
+    } catch (error) {
+      return{
+        error:error
+      }
+    }
+    },
   blockUser: () => {
     try {
       const blockUserResponse = userModel.blockUser();

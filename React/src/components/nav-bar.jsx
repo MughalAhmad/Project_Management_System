@@ -1,4 +1,8 @@
+import Cookies from 'universal-cookie';
+
 function Navbar() {
+  const cookies = new Cookies();
+
   return (
     <>
       <div className="w-full h-16 flex shadow-2xl top-0 ">

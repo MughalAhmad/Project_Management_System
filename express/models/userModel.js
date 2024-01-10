@@ -53,6 +53,22 @@ getUserByEmail: async (email)=>{
       };
     }
   },
+  createTrainee: async (body,userId)=>{
+    try {
+      console.log("model ",body)
+      const user = await models.Users.create({
+        userId,
+        ...body
+      });
+      return{
+        response:user
+      };
+    } catch (error) {
+      return{
+        error:error
+      }
+    }
+    },
   onBoarding: async (userId, instructorId) => {
     try {
       const user = await models.Users.update(
@@ -78,8 +94,8 @@ getUserByEmail: async (email)=>{
   },
   getAllUsers: async(offset,query) => {
     try {
-      console.log("m1",offset);
-      console.log("m2",query)
+      // console.log("m1",offset);
+      // console.log("m2",query)
 
      const users = await models.Users.findAll({
       attributes:{
@@ -101,6 +117,30 @@ getUserByEmail: async (email)=>{
       limit:query.limit,
      
      });
+     return{
+      response:users,
+     }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getInstructorTrainees: async(query) => {
+    try {
+      const users = await models.Users.findAll({
+        where:[
+          {
+            instructorId:query.instructorId,
+          },
+          {
+            isApproved:true
+          }
+        ],
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt", "deletedAt"],
+        },
+      });
      return{
       response:users,
      }

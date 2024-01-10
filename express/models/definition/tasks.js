@@ -17,6 +17,10 @@ Teasks.init({
         type:DataTypes.STRING(60), 
         
 },
+instructorId:{
+    allowNull:false,
+    type:DataTypes.STRING(60),
+}, 
 },
 {
     sequelize,

@@ -7,6 +7,7 @@ const { v4: uuidV4 } = require("uuid");
 module.exports = {
   login:async(body) => {
     try {
+      // console.log("serv",body)
 
       const user = await authModel.login(body);
       if (user.error || !user.response) {
@@ -21,18 +22,21 @@ module.exports = {
           error:"Invalid Credentials"
         }
       }
-      delete user.response.dataValues.password;
-      const UserId =user.response.dataValues.userId;
-      
-      const sessionGet = await sessionModel.getSession(UserId);
+      // console.log("serv res-1",user)
 
+      delete user.response.dataValues.password;
+      const userId =user.response.dataValues.userId;
+      
+      const sessionGet = await sessionModel.getSession(userId);
+      
+      // console.log("serv sess-1   ",sessionGet)
       if(sessionGet.error){
         return{
           error:"invalid User get"
         }
       }
 
-      const sessionDelete = await sessionModel.deleteSession(UserId);
+      const sessionDelete = await sessionModel.deleteSession(userId);
 
       if(sessionDelete.error){
         return{
@@ -43,19 +47,19 @@ module.exports = {
         expiresIn:"1h",
       })
       const sessionId=uuidV4();
-const sessionCreate = await sessionModel.createSession(sessionId,token,UserId);
+const sessionCreate = await sessionModel.createSession(sessionId,token,userId);
 if(sessionCreate.error){
   return{
     error:error,
   }
 }
 
-const SessionValue = sessionCreate;
-SessionValue.role = user.response.dataValues.role
+// const SessionValue = sessionCreate;
+// SessionValue.role = user.response.dataValues.role
 
 return {
-        response: SessionValue,
-        // user:user.response.dataValues
+        response: token,
+        user:user.response.dataValues,
       };
     } catch (error) {
       return {

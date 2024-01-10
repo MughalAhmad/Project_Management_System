@@ -13,33 +13,37 @@ const models={Users,Projects,Tasks,TeamMembers,Teams,Sessions};
 // relations
 
 // team-project one-to-one
-Teams.hasOne(Projects , {foreignKey:"TeamId"});
-Projects.belongsTo(Teams , {foreignKey:"TeamId"});
+Teams.hasOne(Projects , {foreignKey:"teamId"});
+Projects.belongsTo(Teams , {foreignKey:"teamId"});
 
 // user-session one-to-one
-Users.hasOne(Sessions , {foreignKey:"UserId"});
-Sessions.belongsTo(Users , {foreignKey:"UserId"});
+Users.hasOne(Sessions , {foreignKey:"userId"});
+Sessions.belongsTo(Users , {foreignKey:"userId"});
 
 // project-task one-to-many
-Projects.hasMany(Tasks , {foreignKey:"ProjectId"});
-Tasks.belongsTo(Projects , {foreignKey:"ProjectId"});
+Projects.hasMany(Tasks , {foreignKey:"projectId"});
+Tasks.belongsTo(Projects , {foreignKey:"projectId"});
 
 // teamMember-user one-to-many
-TeamMembers.hasMany(Users , {foreignKey:"TeamMembersId"});
-Users.belongsTo(TeamMembers , {foreignKey:"TeamMembersId"});
+TeamMembers.hasMany(Users , {foreignKey:"teamMembersId"});
+Users.belongsTo(TeamMembers , {foreignKey:"teamMembersId"});
 
 // teamMember-teams one-to-many
-Teams.hasMany(TeamMembers , {foreignKey:"TeamsId"});
-TeamMembers.belongsTo(Teams , {foreignKey:"TeamsId"});
+Teams.hasMany(TeamMembers , {foreignKey:"teamsId"});
+TeamMembers.belongsTo(Teams , {foreignKey:"teamsId"});
 
 // users-teams one-to-many (user as a instructor)
-Users.hasMany(Teams , {foreignKey:"UserId"});
-Teams.belongsTo(Users , {foreignKey:"UserId"});
+Users.hasMany(Teams , {foreignKey:"userId"});
+Teams.belongsTo(Users , {foreignKey:"userId"});
 
-Users.hasMany(Users, {
+Users.hasMany(Users, { 
     foreignKey: "instructorId",
     useJunctionTable: false,
   });
+  // Projects.hasMany(Projects, { 
+  //   foreignKey: "instructorId",
+  //   useJunctionTable: false,
+  // });
 
 const db={};
 

@@ -16,6 +16,7 @@ const signupSchema = joi.object().keys({
 module.exports = {
     login: async (req,res)=>{
         try {
+            // console.log("cont",req.body)
             const loginValidate = await loginSchema.validateAsync(req.body);
             const user = await authService.login(loginValidate);
             if(user.error){
@@ -26,8 +27,12 @@ module.exports = {
             res.cookie("auth",user.response , {
                 maxAge: 60 * 60 * 1000,
               })
+              res.cookie("userId",user.user.userId , {
+                maxAge: 60 * 60 * 1000,
+              })
             return res.send({
                 response:user.response,
+                userData:user.user,
             });
         } catch (error) {
             return res.send({

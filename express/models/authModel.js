@@ -3,14 +3,17 @@ const {models} = require("./index")
 module.exports={
     login: async(body)=>{
         try {
-             const user=await models.Users.findOne({
+            // console.log("mod",body)
+
+            const user=await models.Users.findOne({
                 where:{
                     email:body.email
                 },
                 attributes:{
                     exclude:["createdAt","updatedAt","deletedAt"]
                 }
-             })
+            })
+            // console.log("mod res",body)
             return{
                 response:user,
               
