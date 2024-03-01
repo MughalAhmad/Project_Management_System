@@ -12,7 +12,7 @@ const CreateTraineeForm = () => {
         role:"trainee"
       })
     const handler = (e) => {
-        console.log({ ...getData, [e.target.name]: e.target.value })
+        // console.log({ ...getData, [e.target.name]: e.target.value })
         setGetData({ ...getData, [e.target.name]: e.target.value });
       }
 

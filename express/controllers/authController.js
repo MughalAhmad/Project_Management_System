@@ -30,6 +30,7 @@ module.exports = {
               res.cookie("userId",user.user.userId , {
                 maxAge: 60 * 60 * 1000,
               })
+              console.log()
             return res.send({
                 response:user.response,
                 userData:user.user,

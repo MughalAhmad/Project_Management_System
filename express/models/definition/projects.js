@@ -21,11 +21,16 @@ instructorId:{
     allowNull:false,
     type:DataTypes.STRING(60),
 }, 
+status:{
+    allowNull:false,
+    type:DataTypes.STRING(60),
+defaultValue:"pending"
+}
 },
 {
     sequelize,
     timestamps:true,
-    paranoid:true, 
+    paranoid:false, 
     modelName:"projects"
 });
 

@@ -16,8 +16,8 @@ function Login(updateState) {
       withCredentials:true,
     }
     );
-    // console.log("data ", data.response);
-    // console.log("data ", data.userData.role);
+    console.log("resdata ", data.response);
+    console.log("userdata ", data.userData.role);
 
 
     if (data.error) {
@@ -26,7 +26,9 @@ function Login(updateState) {
 
 
     if (data.userData.role == "instructor") {
-      return navigate("/instructor");
+      return navigate("/instructor"
+      , { state: { userName: data.userData.userId } }
+      );
     }
    
     navigate("onboarding"

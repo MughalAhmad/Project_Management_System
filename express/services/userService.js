@@ -5,6 +5,8 @@ const bcryptjs=require("bcryptjs");
 module.exports = {
     createUser: async (body)=>{
         try {
+          console.log("ser",body)
+
             const userId = uuidV4();
             const isUser = await userModel.getUserByEmail(body.email);
             if(isUser.response||isUser.error){
@@ -50,9 +52,43 @@ module.exports = {
       };
     }
   },
+  getUsers:async (query) => {
+    try {
+      const users = await userModel.getUsers( query);
+      if(users.error){
+        return{
+            error:users.error,
+        }
+      }
+      return{
+        response:users.response
+      }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
   getInstructorTrainees:async (query) => {
     try {
       const users = await userModel.getInstructorTrainees(query);
+      if(users.error){
+        return{
+            error:users.error,
+        }
+      }
+      return{
+        response:users.response
+      }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getInstructorBlockTrainees:async (query) => {
+    try {
+      const users = await userModel.getInstructorBlockTrainees(query);
       if(users.error){
         return{
             error:users.error,
@@ -97,9 +133,9 @@ module.exports = {
       }
     }
     },
-  blockUser: () => {
+  blockUser: (body) => {
     try {
-      const blockUserResponse = userModel.blockUser();
+      const blockUserResponse = userModel.blockUser(body.userId);
       if (blockUserResponse.error) {
         return {
           error: blockUserResponse.error,
@@ -107,6 +143,23 @@ module.exports = {
       }
       return {
         res: blockUserResponse.res,
+      };
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  unblockUser: (body) => {
+    try {
+      const unblockUserResponse = userModel.unblockUser(body.userId);
+      if (unblockUserResponse.error) {
+        return {
+          error: unblockUserResponse.error,
+        };
+      }
+      return {
+        res: unblockUserResponse.res,
       };
     } catch (error) {
       return {
@@ -170,7 +223,8 @@ module.exports = {
   },
   updataUser:async (body) => {
     try {
-      const isUser = await userModel.getUserByEmail(body.email);
+      console.log("ser",body)
+      const isUser = await userModel.getUserById(body.userId);
       if(!isUser.response||isUser.error){
           return{
               error:"user does not exist", 
@@ -191,4 +245,90 @@ module.exports = {
       };
     }
   },
+  getTrainees:async (query) => {
+    try {
+      const users = await userModel.getTrainees(query);
+      if(users.error){
+        return{
+            error:users.error,
+        }
+      }
+      return{
+        response:users.response
+      }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getPendingTrainee:async (query) => {
+    try {
+      const users = await userModel.getPendingTrainee( query);
+      if(users.error){
+        return{
+            error:users.error,
+        }
+      }
+      return{
+        response:users.response
+      }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getResolveTrainee:async (query) => {
+    try {
+      const users = await userModel.getResolveTrainee( query);
+      if(users.error){
+        return{
+            error:users.error,
+        }
+      }
+      return{
+        response:users.response
+      }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getAssigned:async (query) => {
+    try {
+      const users = await userModel.getAssigned( query);
+      if(users.error){
+        return{
+            error:users.error,
+        }
+      }
+      return{
+        response:users.response
+      }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getUserById: async (query)=>{
+    try {
+        const user = await userModel.getUserById(query.userId);
+        if(user.error){
+            return{
+                error:user.error 
+            }
+        }
+        return{
+            response:user.response 
+        }
+      
+    } catch (error) {
+      return{
+        error:error
+      }
+    }
+    },
 };

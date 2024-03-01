@@ -1,8 +1,8 @@
 const {Model,DataTypes} = require("sequelize");
 const sequelize =require("../../bin/dbConnection")
-class Teasks extends Model{}
+class Tasks extends Model{}
 
-Teasks.init({
+Tasks.init({
     taskId:{
         primaryKey:true,
         type:DataTypes.STRING(60),
@@ -21,12 +21,17 @@ instructorId:{
     allowNull:false,
     type:DataTypes.STRING(60),
 }, 
+states:{
+    allowNull:false,
+    type:DataTypes.STRING(60),
+defaultValue:"pending"
+}
 },
 {
     sequelize,
     timestamps:true,
-    paranoid:true, 
-    modelName:"teasks"
+    paranoid:false, 
+    modelName:"tasks"
 });
 
-module.exports= Teasks;
+module.exports= Tasks;

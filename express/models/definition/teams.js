@@ -7,9 +7,30 @@ Teams.init({
         primaryKey:true,
         type:DataTypes.STRING(60),
     },
-    teamLeader:{
+    leader:{
         type:DataTypes.STRING(60),
         allowNull:false,
+    },
+    projectId:{
+        type:DataTypes.STRING(60),
+        allowNull:false,
+    },
+    instructorId:{
+        type:DataTypes.STRING(60),
+        allowNull:false,
+    },
+    team1:{
+        type:DataTypes.STRING(60),
+        allowNull:false,
+    },
+    team2:{
+        type:DataTypes.STRING(60),
+    },
+    team3:{
+        type:DataTypes.STRING(60),
+    },
+    team4:{
+        type:DataTypes.STRING(60),
     },
 },{
     sequelize,

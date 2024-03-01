@@ -4,6 +4,7 @@ const joi = require("joi");
 const createUserSchema = joi.object().keys({
     firstName: joi.string().required().min(3).max(40),
     lastName: joi.string().required().min(3).max(40),
+    stack: joi.string().required(),
     email: joi.string().required().email(),
     password: joi.string().required().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
     confirmPassword: joi.ref("password"),
@@ -37,7 +38,8 @@ const createUserSchema = joi.object().keys({
     firstName: joi.string().required().min(3).max(40),
     lastName: joi.string().required().min(3).max(40),
     email: joi.string().required().email(),
-    role: joi.string().valid("instructor", "trainee"),
+    stack: joi.string().required(),
+    assignment:joi.string().required().valid("pending", "resolve"),
   });
   const onBoardingSchema = joi
   .object()
@@ -50,6 +52,7 @@ const createUserSchema = joi.object().keys({
 module.exports ={
     createUser: async (req,res)=>{
         try {
+            console.log("con",req.body)
             const validate = await createUserSchema.validateAsync(req.body);
             const user = await userService.createUser(validate);
             if(user.error){
@@ -85,6 +88,24 @@ module.exports ={
             })
         }
     },
+    getUsers: async (req,res)=>{
+        try {
+            // const validate = await paginationSchema.validateAsync(req.query);
+           const users = await userService.getUsers(req.query);
+           if(users.error){
+           return res.send({
+                error:users.error
+            })
+           };
+           res.send({
+            response:users.response
+           })
+        } catch (error) {
+            return res.send({
+                error:error
+            })
+        }
+    },
     getInstructorTrainees: async (req,res)=>{
       try {
          const users = await userService.getInstructorTrainees(req.query);
@@ -102,6 +123,23 @@ module.exports ={
           })
       }
   },
+  getInstructorBlockTrainees: async (req,res)=>{
+    try {
+       const users = await userService.getInstructorBlockTrainees(req.query);
+       if(users.error){
+       return res.send({
+            error:users.error
+        })
+       };
+       res.send({
+        response:users.response
+       })
+    } catch (error) {
+        return res.send({
+            error:error
+        })
+    }
+},
   createTrainee: async (req,res)=>{
     try {
       console.log("contro",req.body)
@@ -160,7 +198,7 @@ module.exports ={
       },
     blockUser:(req,res)=>{
         try {
-            const blockUserResponse = userService.blockUser();
+            const blockUserResponse = userService.blockUser(req.body);
             if(blockUserResponse.error){
                return res.send({
                     error:blockUserResponse.error,
@@ -175,6 +213,23 @@ module.exports ={
             })
         }
     },
+    unblockUser:(req,res)=>{
+      try {
+          const unblockUserResponse = userService.unblockUser(req.body);
+          if(unblockUserResponse.error){
+             return res.send({
+                  error:unblockUserResponse.error,
+              });
+          }
+          res.send({
+              res:unblockUserResponse.res,
+          });
+      } catch (error) {
+          res.send({
+              error:error
+          })
+      }
+  },
     deleteUser: async(req,res)=>{
         try {
             const validate =await getByUserIdSchema.validateAsync(req.query);
@@ -198,6 +253,7 @@ module.exports ={
     },
     updataUser: async(req,res)=>{
         try {
+          console.log("con",req.body)
             const validateBody = await updateUserSchema.validateAsync(req.body);
             const user = await userService.updataUser(validateBody);
             if(user.error){
@@ -213,5 +269,97 @@ module.exports ={
                 error:error
             })
         }
-    }
+    },
+    getTrainees: async (req,res)=>{
+        try {
+            console.log("++++++++++++++++++++++++++++++++++++++",req.query)
+           const users = await userService.getTrainees(req.query);
+           if(users.error){
+           return res.send({
+                error:users.error
+            })
+           };
+           res.send({
+            response:users.response
+           })
+        } catch (error) {
+            return res.send({
+                error:error
+            })
+        }
+    },
+    getPendingTrainee: async (req,res)=>{
+        try {
+            // const validate = await paginationSchema.validateAsync(req.query);
+           const users = await userService.getPendingTrainee(req.query);
+           if(users.error){
+           return res.send({
+                error:users.error
+            })
+           };
+           res.send({
+            response:users.response
+           })
+        } catch (error) {
+            return res.send({
+                error:error
+            })
+        }
+    },
+    getResolveTrainee: async (req,res)=>{
+        try {
+            // const validate = await paginationSchema.validateAsync(req.query);
+           const users = await userService.getResolveTrainee(req.query);
+           if(users.error){
+           return res.send({
+                error:users.error
+            })
+           };
+           res.send({
+            response:users.response
+           })
+        } catch (error) {
+            return res.send({
+                error:error
+            })
+        }
+    },
+    getAssigned: async (req,res)=>{
+        try {
+            // const validate = await paginationSchema.validateAsync(req.query);
+           const users = await userService.getAssigned(req.query);
+           if(users.error){
+           return res.send({
+                error:users.error
+            })
+           };
+           res.send({
+            response:users.response
+           })
+        } catch (error) {
+            return res.send({
+                error:error
+            })
+        }
+    },
+    getUserById: async (req,res)=>{
+        try {
+            // console.log("con",req.body)
+            // const validate = await createUserSchema.validateAsync(req.body);
+            const user = await userService.getUserById(req.query);
+            if(user.error){
+                return res.send({
+                    error:user.error
+                })
+            };
+            res.send({
+                response:user.response 
+            })
+          
+        } catch (error) {
+            return res.send({
+                error:error 
+            })
+        }
+        },
 }

@@ -1,9 +1,10 @@
 const { Op } = require("sequelize");
 const { models } = require("./index");
+const Users = require("./definition/users");
 module.exports = {
 createUser: async (body,userId)=>{
 try {
-  console.log("body",body)
+  console.log("mod",body)
   const user = await models.Users.create({
     userId,
     ...body
@@ -17,11 +18,11 @@ try {
   }
 }
 },
-getUserByEmail: async (email)=>{
+getUserById: async (userId)=>{
   try {
     const user = await models.Users.findOne({
       where:{
-        email:email
+        userId:userId
       }
   });
     return{
@@ -33,6 +34,22 @@ getUserByEmail: async (email)=>{
     }
   }
   },
+  getUserByEmail: async (email)=>{
+    try {
+      const user = await models.Users.findOne({
+        where:{
+          email:email
+        }
+    });
+      return{
+        response:user
+      };
+    } catch (error) {
+      return{
+        error:error
+      }
+    }
+    },
   getAllInstructors: async () => {
     try {
       const user = await models.Users.findAll({
@@ -126,6 +143,28 @@ getUserByEmail: async (email)=>{
       };
     }
   },
+  getUsers: async(query) => {
+    try {
+      // console.log("m1",offset);
+      // console.log("m2",query)
+
+     const users = await models.Users.findOne({
+      attributes:{
+        exclude:["password", "createdAt", "updatedAt", "deletedAt"],
+      },
+      where:{
+userId:query.userId
+      },
+     });
+     return{
+      response:users,
+     }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
   getInstructorTrainees: async(query) => {
     try {
       const users = await models.Users.findAll({
@@ -134,7 +173,19 @@ getUserByEmail: async (email)=>{
             instructorId:query.instructorId,
           },
           {
-            isApproved:true
+            isApproved:true,
+            isBlocked:false
+          },
+          {
+            ...(query.firstName ? {firstName:{[Op.substring]:query.firstName}}:true),
+          },{
+            ...(query.lastName ? {lastName:{[Op.substring]:query.lastName}}:true),
+          },{
+            ...(query.email ? {email:{[Op.substring]:query.email}}:true),
+          },{
+            ...(query.stack ? {stack:{[Op.substring]:query.stack}}:true),
+          },{
+            ...(query.assignment ? {assignment:{[Op.substring]:query.assignment}}:true),
           }
         ],
         attributes: {
@@ -150,10 +201,69 @@ getUserByEmail: async (email)=>{
       };
     }
   },
-  blockUser: () => {
+  getInstructorBlockTrainees: async(query) => {
     try {
+      const users = await models.Users.findAll({
+        where:[
+          {
+            instructorId:query.instructorId,
+          },
+          {
+            isBlocked:true
+          },{
+            ...(query.firstName ? {firstName:{[Op.substring]:query.firstName}}:true),
+          },{
+            ...(query.lastName ? {lastName:{[Op.substring]:query.lastName}}:true),
+          },{
+            ...(query.email ? {email:{[Op.substring]:query.email}}:true),
+          },{
+            ...(query.stack ? {stack:{[Op.substring]:query.stack}}:true),
+          }
+        ],
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt", "deletedAt"],
+        },
+      });
+     return{
+      response:users,
+     }
+    } catch (error) {
       return {
-        res: "User Block",
+        error: error,
+      };
+    }
+  },
+  blockUser: async (userId) => {
+    try {
+      const user = await models.Users.update({
+        isBlocked : true,
+      },{
+        where:{
+          userId:userId,
+        },
+      }
+      )
+      return {
+        res: "User Blocked",
+      };
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  unblockUser: async (userId) => {
+    try {
+      const user = await models.Users.update({
+        isBlocked : false,
+      },{
+        where:{
+          userId:userId,
+        },
+      }
+      )
+      return {
+        res: "User Blocked",
       };
     } catch (error) {
       return {
@@ -179,7 +289,7 @@ getUserByEmail: async (email)=>{
   },
   updataUser: async(body) => {
     try {
-      console.log("userId",body.userId)
+      console.log("userId",body)
      const user = await models.Users.update({...body,},{
       where:{
         userId:body.userId,
@@ -187,6 +297,98 @@ getUserByEmail: async (email)=>{
      });
      return{
       response:user
+     }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getTrainees: async(query) => {
+    try {
+      const users = await models.Users.findAll({
+        where:
+          {
+            userId:query.userId,
+          }
+        ,
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt", "deletedAt"],
+        },
+      });
+     return{
+      response:users,
+     }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getPendingTrainee: async(query) => {
+    try {
+      // console.log("m1",offset);
+      // console.log("m2",query)
+
+     const users = await models.Users.findAll({
+      attributes:{
+        exclude:["password", "createdAt", "updatedAt", "deletedAt"],
+      },
+      where:{
+userId:query.userId
+      },
+     });
+     return{
+      response:users,
+     }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getResolveTrainee: async(query) => {
+    try {
+      // console.log("m1",offset);
+      // console.log("m2",query)
+
+     const users = await models.Users.findOne({
+      attributes:{
+        exclude:["password", "createdAt", "updatedAt", "deletedAt"],
+      },
+      where:{
+userId:query.userId
+      },
+     });
+     return{
+      response:users,
+     }
+    } catch (error) {
+      return {
+        error: error,
+      };
+    }
+  },
+  getAssigned: async(query) => {
+    try {
+      console.log("m1",query);
+      // console.log("m2",query)
+
+     const users = await models.Users.findAll({
+      attributes:{
+        exclude:["password", "createdAt", "updatedAt", "deletedAt"],
+      },
+      where:[
+        {
+          instructorId:query.instructorId
+                },
+        {
+          assignment:query.assignment
+                },
+      ]
+     });
+     return{
+      response:users,
      }
     } catch (error) {
       return {

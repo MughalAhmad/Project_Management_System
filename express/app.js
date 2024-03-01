@@ -20,6 +20,8 @@ const userRouter =require("./routes/userRouter");
 const projectRouter = require("./routes/projectRouter");
 const taskRouter = require("./routes/taskRouter");
 const requestRouter = require("./routes/requestRouter");
+const teamRouter = require("./routes/teamRouter");
+
 
 
 
@@ -28,6 +30,8 @@ app.use("/user",userRouter);
 app.use("/project",projectRouter);
 app.use("/task",taskRouter);
 app.use("/request",requestRouter);
+app.use("/team",teamRouter);
+
 
 
 

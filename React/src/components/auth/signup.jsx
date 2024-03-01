@@ -20,6 +20,8 @@ function Signup(updateState) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
+  const [stack, setStack] = useState("");
+
 
   const signup = async () => {
     const { data } = await axios.post("http://localhost:3000/user/create", {
@@ -29,6 +31,7 @@ function Signup(updateState) {
       password,
       confirmPassword,
       role,
+      stack,
     });
 
     if (data.error) {
@@ -99,6 +102,17 @@ function Signup(updateState) {
               type="password"
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
+              }}
+            />
+             <label className="text-md text-black font-medium mb-1">
+              Stack
+            </label>
+            <input
+              className="bg-white border-2 border-gray-300 py-1 px-2 rounded-lg mb-2 focus:outline-none text-black font-medium"
+              required
+              type="text"
+              onChange={(e) => {
+                setStack(e.target.value);
               }}
             />
             <label className="text-md text-black font-medium mb-1">Role</label>

@@ -66,16 +66,42 @@ return {
         if(project.error){
            return {
                 error:project.error,
-            };
+            }
         }
+        console.log("ser++=2",project.response.dataValues)
+       
         return{
-            response:project.response,
-        };
+            response:project.response
+        }
     } catch (error) {
         return{
             error:error,
         }
     }
+},
+updateProject:async (body) => {
+  try {
+    console.log("ser",body)
+    // const isUser = await userModel.getUserById(body.userId);
+    // if(!isUser.response||isUser.error){
+    //     return{
+    //         error:"user does not exist", 
+    //     }
+    // };
+   const project=await projectModel.updateProject(body);
+   if(project.error){
+    return{
+      error:project.error
+    }
+   };
+   return{
+    response:project.response
+   }
+  } catch (error) {
+    return {
+      error: error,
+    };
+  }
 },
   signup: async (body) => {
     try {
@@ -100,4 +126,84 @@ return {
       };
     }
   },
+  deleteProject: async(query)=>{
+    try {
+        // console.log("ser   ",query)
+        const project = await projectModel.deleteProject(query);
+        if(project.error){
+           return {
+                error:project.error,
+            }
+        }
+        // console.log("ser++=2",project.response)
+       
+        return{
+            response:project.response
+        }
+    } catch (error) {
+        return{
+            error:error,
+        }
+    }
+},
+getProject: async(query)=>{
+  try {
+      console.log("ser   ",query)
+      const project = await projectModel.getProject(query);
+      if(project.error){
+         return {
+              error:project.error,
+          }
+      }
+      console.log("ser++=2",project.response.dataValues)
+     
+      return{
+          response:project.response
+      }
+  } catch (error) {
+      return{
+          error:error,
+      }
+  }
+},
+getProjectWithNoInstructorId: async(query)=>{
+  try {
+      console.log("ser   ",query)
+      const project = await projectModel.getProjectWithNoInstructorId(query);
+      if(project.error){
+         return {
+              error:project.error,
+          }
+      }
+      console.log("ser++=2",project.response.dataValues)
+     
+      return{
+          response:project.response
+      }
+  } catch (error) {
+      return{
+          error:error,
+      }
+  }
+},
+getUpdatedProjects: async(query)=>{
+  try {
+      console.log("ser   ",query)
+      const project = await projectModel.getUpdatedProjects(query);
+      if(project.error){
+         return {
+              error:project.error,
+          }
+      }
+      console.log("ser++=2",project.response.dataValues)
+     
+      return{
+          response:project.response
+      }
+  } catch (error) {
+      return{
+          error:error,
+      }
+  }
+},
 };

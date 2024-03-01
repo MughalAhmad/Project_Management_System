@@ -3,7 +3,7 @@ const { v4: uuidV4 } = require("uuid");
 module.exports = {
     createTask:async(body) => {
         try {
-            console.log("ser   ",body)
+            // console.log("ser   ",body)
             const taskId=uuidV4();
       const task = await taskModel.createTask(body,taskId);
       if (task.error) {
@@ -61,15 +61,27 @@ return {
   },
   getAllTasks: async(query)=>{
     try {
-        console.log("ser   ",query)
+        // console.log("ser   ",query)
         const task = await taskModel.getAllTasks(query);
         if(task.error){
            return {
                 error:task.error,
             };
         }
+        // console.log("ser1   ",task.response.dataValuess)
+  // const projectName= await taskModel.getProjectName(task.response.dataValues.projectId);
+        // console.log("ser1   ",projectName.response)
+
+  // if(projectName.error){
+  //   return {
+  //     error:projectName.error,
+  // };
+  // }
+
         return{
             response:task.response,
+            // proName:projectName.response
+
         };
     } catch (error) {
         return{
@@ -77,27 +89,49 @@ return {
         }
     }
 },
-  signup: async (body) => {
+  updateTask:async (body) => {
     try {
-      console.log("S1",body)
-      delete body.repeat_password;
-      console.log("S2",body)
-     body.password = await bcryptjs.hash(body.password,10);
-     console.log("S3",body)
-
-      const   signupResponse =  authModel.signup(body);
-      if (signupResponse.error) {
-        return {
-          error: signupResponse.error,
-        };
+      // console.log("ser",body)
+      // const isUser = await userModel.getUserById(body.userId);
+      // if(!isUser.response||isUser.error){
+      //     return{
+      //         error:"user does not exist", 
+      //     }
+      // };
+     const task=await taskModel.updateTask(body);
+     if(task.error){
+      return{
+        error:task.error
       }
-      return {
-        res: signupResponse.res,
-      };
+     };
+     return{
+      response:task.response
+     }
     } catch (error) {
       return {
         error: error,
       };
     }
   },
+  deleteProject: async(query)=>{
+    try {
+        // console.log("ser   ",query)
+        const task = await taskModel.deleteProject(query);
+        if(task.error){
+           return {
+                error:task.error,
+            };
+        }
+
+        return{
+            response:task.response,
+            // proName:projectName.response
+
+        };
+    } catch (error) {
+        return{
+            error:error,
+        }
+    }
+},
 };

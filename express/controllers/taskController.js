@@ -2,17 +2,23 @@ const taskService = require("../services/taskSevice");
 const joi =require("joi");
 
 const createTaskSchema = joi.object().keys({
-    title: joi.string().alphanum().min(3).max(30).required(),
-    description: joi.string().alphanum().min(3).max(1000).required(),
+    title: joi.string().required(),
+    description: joi.string().required(),
     projectId: joi.string().required(),
     instructorId: joi.string().required(),
-
 });
+const updateTaskSchema = joi.object().keys({
+    taskId: joi.string().required(),
+    title: joi.string().required(),
+    instructorId: joi.string().required(),
+    description: joi.string().required(),
+    projectId: joi.string().required(),
+  });
 module.exports = {
     createTask: async (req,res)=>{
         try {
+            // console.log("controller ",req.body)
             const createTaskValidate = await createTaskSchema.validateAsync(req.body);
-            // console.log("cont   ",createProjectValidate)
             const task = await taskService.createTask(createTaskValidate);
             if(task.error){
                return  res.send({
@@ -37,13 +43,16 @@ module.exports = {
     },
     getAllTasks: async(req,res)=>{
         try {
-            console.log("cont   ",req.query)
+            // console.log("cont   ",req.query)
             const task = await taskService.getAllTasks(req.query);
             if(task.error){
                return  res.send({
                     error:task.error,
                 });
             }
+            // console.log("colllllllllllllllllllllllllllllllll",task.response)
+            // console.log("colllllllllllllcccccccccccc",task.proName)
+
             return res.send({
                 response:task.response,
             });
@@ -53,23 +62,43 @@ module.exports = {
             })
         }
     },
-    signup:async(req,res)=>{
+    updateTask: async(req,res)=>{
         try {
-            const signupValidate = await signupSchema.validateAsync(req.body);
-
-            const signupResponse = await authService.signup(signupValidate);
-            // console.log("c1",signupResponse);
-            if(signupResponse.error){
-                res.send({
-                    error:signupResponse.error,
-                });
+        //   console.log("con",req.body)
+            const validateBody = await updateTaskSchema.validateAsync(req.body);
+            const task = await taskService.updateTask(validateBody);
+            if(task.error){
+                return res.send({
+                    error:task.error
+                })
             }
             res.send({
-                res:signupResponse.res,
+                response:task.response
+            })
+        } catch (error) {
+            return res.send({
+                error:error
+            })
+        }
+    },
+    deleteProject: async(req,res)=>{
+        try {
+            console.log("cont   ",req.query)
+            const task = await taskService.deleteProject(req.query);
+            if(task.error){
+               return  res.send({
+                    error:task.error,
+                });
+            }
+            // console.log("colllllllllllllllllllllllllllllllll",task.response)
+            // console.log("colllllllllllllcccccccccccc",task.proName)
+
+            return res.send({
+                response:task.response,
             });
         } catch (error) {
-            res.send({
-                error:error
+            return res.send({
+                error:error,
             })
         }
     },

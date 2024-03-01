@@ -20,6 +20,16 @@ Users.init({
         allowNull:false,
         unique:true,
     },
+    stack:{
+      type:DataTypes.STRING(60),
+      allowNull:false,
+  },
+  assignment:{
+    type:DataTypes.STRING(60),
+    allowNull:false,
+    defaultValue: "unassigned",
+
+},
     password:{
         type:DataTypes.STRING(60),
         allowNull:false,

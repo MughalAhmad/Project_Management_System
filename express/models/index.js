@@ -21,8 +21,8 @@ Users.hasOne(Sessions , {foreignKey:"userId"});
 Sessions.belongsTo(Users , {foreignKey:"userId"});
 
 // project-task one-to-many
-Projects.hasMany(Tasks , {foreignKey:"projectId"});
-Tasks.belongsTo(Projects , {foreignKey:"projectId"});
+Projects.hasMany(Tasks , {foreignKey:"projectId", onDelete: "CASCADE"});
+Tasks.belongsTo(Projects , {foreignKey:"projectId" , onDelete: "CASCADE"});
 
 // teamMember-user one-to-many
 TeamMembers.hasMany(Users , {foreignKey:"teamMembersId"});
@@ -51,4 +51,4 @@ db.sequelize=sequelize;
 sequelize.models=models;
 
 
-module.exports={db , models};
+module.exports={db , models, sequelize};
